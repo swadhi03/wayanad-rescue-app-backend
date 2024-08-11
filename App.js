@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const LoginModel = require("./models/Admin")
 
-mongoose.connect("mongodb+srv://swathi:swathi2609@cluster0.em0miqo.mongodb.net/wayanad_rescuedb?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect("mongodb+srv://swathi:swathi2609@cluster0.em0miqo.mongodb.net/wayanad_rescue_db?retryWrites=true&w=majority&appName=Cluster0")
 
 const app = express()
 app.use(cors())
@@ -17,7 +17,7 @@ app.post("/AdminSignUp",(req,res)=>{
     let hashedPassword = bcrypt.hashSync(input.password,10)
     input.password=hashedPassword
     console.log(input)
-    let result = new LoginModel
+    let result = new LoginModel(input)
     result.save()
     res.json({"status":"success"})
 
