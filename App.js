@@ -4,6 +4,7 @@ const cors = require("cors")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const LoginModel = require("./models/Admin")
+const PeopleModel = require("./models/People")
 
 mongoose.connect("mongodb+srv://swathi:swathi2609@cluster0.em0miqo.mongodb.net/wayanad_rescue_db?retryWrites=true&w=majority&appName=Cluster0")
 
@@ -47,6 +48,22 @@ app.post("/AdminSignIn",(req,res)=>{
             }
         }   
     ).catch()
+})
+
+app.post("/AddMissingPeople",(req,res)=>{
+    let input=req.body
+    let token=req.headers.token
+    jwt.verify(token,"rescue-app",
+        (error,decoded)=>{
+            if (decoded && decoded.email) {
+                let result = new PeopleModel(input)
+                result.save()
+                res.json({"status":"success"})
+            } else {
+                res.json({"status":"Failed to register"})
+            }
+        }
+    )
 })
 
 app.listen(8081,()=>{
